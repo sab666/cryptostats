@@ -1,0 +1,18 @@
+addresses:
+  bitcoin:
+    - 'herpie'
+    - 'derpie'
+  ethereum:
+    - 'flerpie'
+  ripple:
+    - 'merpie'
+  bitcoincash:
+    - 'twerpie'
+  nxt:
+    - 'schmerpie'
+  ignis:
+    - 'querpie'
+
+influxdb:
+  host: '127.0.0.1'
+  port: '8086'
