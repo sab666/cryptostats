@@ -15,6 +15,18 @@ class Coin
     private $symbol = null;
     private $balance = null;
     private $exchangeRate = null;
+    private $addresses = [];
+
+    public function __construct(array $data = [])
+    {
+        if(isset($data['addresses']) && is_array($data['addresses'])) {
+            $this->addresses = $data['addresses'];
+        }
+
+        if(isset($data['balance']) && is_float($data['balance'])) {
+            $this->balance = $data['balance'];
+        }
+    }
 
     /**
      * @return string
@@ -93,6 +105,22 @@ class Coin
         }
 
         return $this->exchangeRate;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAddresses(): array
+    {
+        return $this->addresses;
+    }
+
+    /**
+     * @param array $addresses
+     */
+    public function setAddresses(array $addresses): void
+    {
+        $this->addresses = $addresses;
     }
 
 

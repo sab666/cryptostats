@@ -9,13 +9,12 @@
 namespace App\Entity;
 
 
-class Bitcoin extends Coin
+class Ethereum extends Coin
 {
-
     public function __construct(array $data = [])
     {
-        $this->setName('Bitcoin');
-        $this->setSymbol('BTX');
+        $this->setName('Ethereum');
+        $this->setSymbol('ETH');
 
         parent::__construct($data);
     }
