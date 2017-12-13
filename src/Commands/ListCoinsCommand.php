@@ -9,23 +9,27 @@
 namespace App\Commands;
 
 
-use App\Entity\Bitcoin;
+use App\Controller\WalletCollectionController;
+use App\Entity\Coin;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ListCoinsCommand extends Command
+class ListCoinsCommand extends ContainerAwareCommand
 {
     private $logger;
+    /** @var Coin[]  */
+    private $wallets;
 
     /**
      * ListCoinsCommand constructor.
      * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, WalletCollectionController $walletCollection)
     {
         $this->logger = $logger;
+        $this->wallets = $walletCollection->getWallets();
 
         parent::__construct();
     }
@@ -40,11 +44,15 @@ class ListCoinsCommand extends Command
     {
         $this->logger->info('Listing Coins');
         $output->writeln('Huh? What? I was sleeping, leave me alone.');
+        foreach($this->wallets as $wallet) {
+            $output->writeln(sprintf(
+                'Found one %s (%s) wallet.',
+                $wallet->getName(),
+                $wallet->getSymbol()
+            ));
+        }
 
 
-        $bla = new Bitcoin();
-        $bla->getExchangeRate('USD');
-        var_dump($bla);
 
     }
 }
