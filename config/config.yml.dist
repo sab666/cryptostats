@@ -14,8 +14,7 @@ parameters:
       addresses:
         - 'twerpie'
     nxt:
-      addresses:
-        - 'schmerpie'
+      amount: 2.5
 
   influxdb:
     host: '127.0.0.1'
