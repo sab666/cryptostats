@@ -1,18 +1,22 @@
-addresses:
-  bitcoin:
-    - 'herpie'
-    - 'derpie'
-  ethereum:
-    - 'flerpie'
-  ripple:
-    - 'merpie'
-  bitcoincash:
-    - 'twerpie'
-  nxt:
-    - 'schmerpie'
-  ignis:
-    - 'querpie'
+parameters:
+  currencies:
+    bitcoin:
+      addresses:
+        - 'herpie'
+        - 'derpie'
+    ethereum:
+      addresses:
+        - 'flerpie'
+    ripple:
+      addresses:
+        - 'merpie'
+    bitcoincash:
+      addresses:
+        - 'twerpie'
+    nxt:
+      addresses:
+        - 'schmerpie'
 
-influxdb:
-  host: '127.0.0.1'
-  port: '8086'
+  influxdb:
+    host: '127.0.0.1'
+    port: '8086'
