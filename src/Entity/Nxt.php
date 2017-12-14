@@ -9,7 +9,7 @@
 namespace App\Entity;
 
 
-class Nxt extends Coin
+class Nxt extends Coin implements CoinInterface
 {
     public function __construct(array $data = [])
     {

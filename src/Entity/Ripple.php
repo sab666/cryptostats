@@ -9,7 +9,7 @@
 namespace App\Entity;
 
 
-class Ripple extends Coin
+class Ripple extends Coin implements CoinInterface
 {
     public function __construct(array $data = [])
     {

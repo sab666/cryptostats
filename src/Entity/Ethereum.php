@@ -9,7 +9,7 @@
 namespace App\Entity;
 
 
-class Ethereum extends Coin
+class Ethereum extends Coin implements CoinInterface
 {
     public function __construct(array $data = [])
     {

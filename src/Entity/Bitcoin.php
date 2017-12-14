@@ -9,7 +9,7 @@
 namespace App\Entity;
 
 
-class Bitcoin extends Coin
+class Bitcoin extends Coin implements CoinInterface
 {
 
     public function __construct(array $data = [])

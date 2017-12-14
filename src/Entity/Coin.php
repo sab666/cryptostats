@@ -9,7 +9,7 @@
 namespace App\Entity;
 
 
-class Coin
+class Coin implements CoinInterface
 {
     private $name = null;
     private $symbol = null;
