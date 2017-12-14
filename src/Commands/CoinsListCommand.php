@@ -10,16 +10,16 @@ namespace App\Commands;
 
 
 use App\Controller\WalletCollectionController;
-use App\Entity\Coin;
+use App\Entity\CoinInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ListCoinsCommand extends ContainerAwareCommand
+class CoinsListCommand extends ContainerAwareCommand
 {
     private $logger;
-    /** @var Coin[]  */
+    /** @var CoinInterface[]  */
     private $wallets;
 
     /**
@@ -43,7 +43,6 @@ class ListCoinsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->logger->info('Listing Coins');
-        $output->writeln('Huh? What? I was sleeping, leave me alone.');
         foreach($this->wallets as $wallet) {
             $output->writeln(sprintf(
                 'Found one %s (%s) wallet.',
