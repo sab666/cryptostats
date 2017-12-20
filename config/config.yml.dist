@@ -16,6 +16,10 @@ parameters:
     nxt:
       amount: 2.5
 
+  fiatCurrency: 'EUR'
+
+  exchange: 'poloniex'
+
   influxdb:
     host: '127.0.0.1'
     port: '8086'
