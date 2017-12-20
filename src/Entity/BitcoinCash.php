@@ -15,7 +15,7 @@ class BitcoinCash extends Coin implements CoinInterface
     public function __construct(array $data = [])
     {
         $this->setName('Bitcoin Cash');
-        $this->setSymbol('BCC');
+        $this->setSymbol('BCH');
 
         parent::__construct($data);
     }

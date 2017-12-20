@@ -15,7 +15,7 @@ class Bitcoin extends Coin implements CoinInterface
     public function __construct(array $data = [])
     {
         $this->setName('Bitcoin');
-        $this->setSymbol('BTX');
+        $this->setSymbol('BTC');
 
         parent::__construct($data);
     }
