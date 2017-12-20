@@ -10,7 +10,7 @@ namespace App\Commands;
 
 
 use App\Controller\WalletCollectionController;
-use App\Entity\Coin;
+use App\Entity\CoinInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,8 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CoinsWorthCommand extends ContainerAwareCommand
 {
     private $logger;
-    /** @var Coin[] */
-    private $wallets;
+    /** @var CoinInterface[] */
+    private $walletCollection;
 
     /**
      * CoinsWorthCommand constructor.
@@ -29,7 +29,7 @@ class CoinsWorthCommand extends ContainerAwareCommand
     public function __construct(LoggerInterface $logger, WalletCollectionController $walletCollection)
     {
         $this->logger = $logger;
-        $this->wallets = $walletCollection->getWallets();
+        $this->walletCollection = $walletCollection;
 
         parent::__construct();
     }
@@ -43,7 +43,23 @@ class CoinsWorthCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->logger->info('Getting Total worth');
-        $output->writeln('LEAVE ME BE');
+        $this->walletCollection->loadExchangeRates('EUR');
+
+        foreach ($this->walletCollection->getWallets() as $wallet) {
+            try {
+                $rate = $wallet->getExchangeRate('EUR');
+                $output->writeln(sprintf(
+                    'Exchange rate for %s is %s',
+                    $wallet->getName(),
+                    $rate
+                ));
+            } catch (Exception $exception) {
+                $this->logger->critical(sprintf(
+                    "Everything went to shit! %s",
+                    $exception->getMessage()
+                ));
+            }
+        }
     }
 
 

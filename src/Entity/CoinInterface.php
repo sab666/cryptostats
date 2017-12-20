@@ -10,6 +10,8 @@ namespace App\Entity;
 
 interface CoinInterface
 {
+    public function __construct(array $data);
+
     /**
      * @return string
      */

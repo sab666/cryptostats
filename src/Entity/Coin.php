@@ -9,16 +9,23 @@
 namespace App\Entity;
 
 
+use Psr\Log\LoggerInterface;
+
 class Coin implements CoinInterface
 {
-    private $name = null;
-    private $symbol = null;
-    private $balance = null;
-    private $exchangeRate = null;
-    private $addresses = [];
+    protected $name = null;
+    protected $symbol = null;
+    protected $balance = null;
+    protected $exchangeRate = null;
+    protected $addresses = [];
+    protected $fiat = null;
+    /** @var LoggerInterface */
+    private $logger;
 
     public function __construct(array $data = [])
     {
+        $this->fiat = $data['fiat'];
+
         if(isset($data['addresses']) && is_array($data['addresses'])) {
             $this->addresses = $data['addresses'];
         }
@@ -26,6 +33,13 @@ class Coin implements CoinInterface
         if(isset($data['balance']) && is_float($data['balance'])) {
             $this->balance = $data['balance'];
         }
+    }
+
+    /** @required */
+    public function setLogger(LoggerInterface $logger) {
+        $this->logger = $logger;
+
+        $this->logger->debug('Yaaay, COIN has a logger now!');
     }
 
     /**
@@ -76,6 +90,7 @@ class Coin implements CoinInterface
         $this->balance = $balance;
     }
 
+
     /**
      * @param string $fiatSymbol
      * @param bool $forceUpdate
@@ -88,20 +103,18 @@ class Coin implements CoinInterface
             throw new \Exception("Not a valid symbol: '$fiatSymbol'.");
         }
 
-        $key = sprintf('X%sZ%s', $this->symbol, $fiatSymbol);
+        $key = sprintf('%s-%s', $this->symbol, $fiatSymbol);
 
-        // Get rate from Kraken if not yet set or if forced.
+        // Get rate from cryptonator.com if not yet set or if forced.
         if ($forceUpdate || $this->exchangeRate === null) {
-            $json = json_decode(file_get_contents(sprintf(
-                'https://api.kraken.com/0/public/Ticker?pair=%s%s',
-                $this->symbol,
-                $fiatSymbol
-            )),true);
+            $json = json_decode(@file_get_contents(sprintf(
+                'https://api.cryptonator.com/api/ticker/%s',
+                $key
+            )), true);
 
-            if(is_array($json) && isset($json['result']) && isset($json['result'][$key])) {
-                $this->exchangeRate = $json['result'][$key]['c'][0];
+            if (is_array($json) && isset($json['ticker']) && isset($json['ticker']['price'])) {
+                $this->exchangeRate = $json['ticker']['price'];
             }
-            print_r($json);
         }
 
         return $this->exchangeRate;

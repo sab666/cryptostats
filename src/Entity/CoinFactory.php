@@ -10,6 +10,8 @@ namespace App\Entity;
 
 
 use Exception;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpKernel\Log\Logger;
 
 class CoinFactory
 {
@@ -17,7 +19,7 @@ class CoinFactory
     /**
      * @param $type
      * @param $data
-     * @return Bitcoin|BitcoinCash|Ethereum|Nxt|Ripple
+     * @return CoinInterface
      * @throws Exception
      */
     public static function build($type, $data)

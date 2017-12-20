@@ -9,17 +9,17 @@
 namespace App\Controller;
 
 
-use App\Entity\Coin;
 use App\Entity\CoinFactory;
 use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class WalletCollectionController extends Controller
+final class WalletCollectionController extends Controller
 {
     private $logger;
     private $wallets;
+    private $fiat;
     protected $container;
 
     /**
@@ -33,6 +33,8 @@ class WalletCollectionController extends Controller
 //        $this->wallets = $this->container->parameters;
 
         $currencies = $container->getParameter('currencies');
+        $this->fiat = $container->getParameter('fiatCurrency');
+
         $this->loadWallets($currencies);
     }
 
@@ -43,13 +45,30 @@ class WalletCollectionController extends Controller
         }
         // Assign wallets
         foreach ($currencies as $name=>$data) {
-            $this->logger->info(sprintf(
-                "Adding a '%s' wallet to the Collection.",
+            $this->logger->debug(sprintf(
+                "WalletCollection: Adding a '%s' wallet to the Collection.",
                 $name
             ));
+            $data['fiat'] = $this->fiat;
             $this->wallets[] = CoinFactory::build($name, $data);
         }
 
+    }
+
+    public function loadExchangeRates($fiat)
+    {
+        foreach($this->getWallets() as $wallet) {
+            try {
+                $this->logger->info(sprintf(
+                    'Loading exchange rate for %s/%s.',
+                    $wallet->getName(),
+                    $this->fiat
+                ));
+                $wallet->getExchangerate($this->fiat);
+            } catch (Exception $exception) {
+
+            }
+        }
     }
 
     /**
