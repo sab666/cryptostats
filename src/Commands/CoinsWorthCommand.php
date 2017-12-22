@@ -46,20 +46,16 @@ class CoinsWorthCommand extends ContainerAwareCommand
         $this->walletCollection->loadExchangeRates('EUR');
 
         foreach ($this->walletCollection->getWallets() as $wallet) {
-            try {
-                $rate = $wallet->getExchangeRate('EUR');
-                $output->writeln(sprintf(
-                    'Exchange rate for %s is %s',
-                    $wallet->getName(),
-                    $rate
-                ));
-            } catch (Exception $exception) {
-                $this->logger->critical(sprintf(
-                    "Everything went to shit! %s",
-                    $exception->getMessage()
-                ));
-            }
+//            $rate = $wallet->getExchangeRate('EUR');
+//            $amount = $wallet->getAmount();
+
+            $output->writeln(sprintf(
+                'Total worth for %s is %s',
+                $wallet->getName(),
+                round($wallet->getBalance(), 2)
+            ));
         }
+        $output->writeln("\n");
     }
 
 
