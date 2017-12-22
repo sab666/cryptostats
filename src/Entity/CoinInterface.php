@@ -25,7 +25,7 @@ interface CoinInterface
     /**
      * @return string
      */
-    public function getBalance(): string;
+    public function getBalance();
 
     /**
      * @param float $balance

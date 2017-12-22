@@ -31,7 +31,7 @@ class Coin implements CoinInterface
             $this->addresses = $data['addresses'];
         }
 
-        if(isset($data['amount']) && is_float($data['amount'])) {
+        if(isset($data['amount']) && is_numeric($data['amount'])) {
             $this->amount = $data['amount'];
         }
     }
@@ -78,7 +78,7 @@ class Coin implements CoinInterface
     /**
      * @return string
      */
-    public function getBalance(): string
+    public function getBalance()
     {
         try {
             $this->balance = $this->getAmount() * $this->getExchangeRate('EUR');
