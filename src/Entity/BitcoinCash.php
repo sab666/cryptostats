@@ -19,4 +19,33 @@ class BitcoinCash extends Coin implements CoinInterface
 
         parent::__construct($data);
     }
+
+    public function getAmount()
+    {
+        if ($this->amount != null) return $this->amount;
+
+        $total = 0;
+        foreach ($this->addresses as $address) {
+            $balance = file_get_contents(sprintf(
+                'https://cashexplorer.bitcoin.com/api/addr/%s/balance',
+                $address));
+
+            if (is_numeric($balance)) {
+                $total += $this->satoshiToBCH($balance);
+            } else {
+                $total = null;
+                break;
+            }
+        }
+
+        if ($total != null) {
+            $this->amount = $total;
+        }
+
+        return parent::getAmount();
+    }
+
+    private function satoshiToBCH($satoshi) {
+        return bcdiv($satoshi,100000000,8);
+    }
 }
