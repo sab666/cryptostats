@@ -19,4 +19,34 @@ class Bitcoin extends Coin implements CoinInterface
 
         parent::__construct($data);
     }
+
+    public function getAmount()
+    {
+        if ($this->amount != null) return $this->amount;
+
+        $total = 0;
+        foreach ($this->addresses as $address) {
+            $balance = file_get_contents(sprintf(
+                'https://blockchain.info/de/q/addressbalance/%s?confirmations=3',
+                $address
+            ));
+
+            if (is_numeric($balance)) {
+                $total += $this->satoshiToBTC($balance);
+            } else {
+                $total = null;
+                break;
+            }
+        }
+
+        if ($total != null) {
+            $this->amount = $total;
+        }
+
+        return parent::getAmount();
+    }
+
+    private function satoshiToBTC($satoshi) {
+        return bcdiv($satoshi,100000000,8);
+    }
 }

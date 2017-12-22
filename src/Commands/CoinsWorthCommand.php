@@ -10,6 +10,7 @@ namespace App\Commands;
 
 
 use App\Controller\WalletCollectionController;
+use App\Entity\Coin;
 use App\Entity\CoinInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -45,17 +46,31 @@ class CoinsWorthCommand extends ContainerAwareCommand
         $this->logger->info('Getting Total worth');
         $this->walletCollection->loadExchangeRates('EUR');
 
-        foreach ($this->walletCollection->getWallets() as $wallet) {
-//            $rate = $wallet->getExchangeRate('EUR');
-//            $amount = $wallet->getAmount();
+        $allCoinWorth = $this->walletCollection->getTotalWorth();
 
+        if(isset($allCoinWorth['total'])) {
+            $total = $allCoinWorth['total'];
+            unset($allCoinWorth['total']);
+        } else {
+            $total = false;
+        }
+
+        foreach($allCoinWorth as $name=>$worth) {
             $output->writeln(sprintf(
-                'Total worth for %s is %s',
-                $wallet->getName(),
-                round($wallet->getBalance(), 2)
+                'Balance for %s is %s',
+                $name,
+                Coin::formatAmount($worth)
             ));
         }
-        $output->writeln("\n");
+
+        if($total) {
+            $output->writeln(sprintf(
+                'Total worth is %s',
+                Coin::formatAmount($total)
+            ));
+        }
+
+
     }
 
 

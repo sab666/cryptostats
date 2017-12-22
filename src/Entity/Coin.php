@@ -147,5 +147,10 @@ class Coin implements CoinInterface
         $this->addresses = $addresses;
     }
 
+    public static function formatAmount($amount): string
+    {
+        return number_format($amount, 2, ',', '.');
+    }
+
 
 }

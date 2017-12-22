@@ -40,11 +40,11 @@ final class WalletCollectionController extends Controller
 
     private function loadWallets($currencies)
     {
-        if(!is_array($currencies) || count($currencies) < 1) {
+        if (!is_array($currencies) || count($currencies) < 1) {
             throw new Exception('No currencies defined in config.yml. Sadness.');
         }
         // Assign wallets
-        foreach ($currencies as $name=>$data) {
+        foreach ($currencies as $name => $data) {
             $this->logger->debug(sprintf(
                 "WalletCollection: Adding a '%s' wallet to the Collection.",
                 $name
@@ -57,7 +57,7 @@ final class WalletCollectionController extends Controller
 
     public function loadExchangeRates($fiat)
     {
-        foreach($this->getWallets() as $wallet) {
+        foreach ($this->getWallets() as $wallet) {
             try {
                 $this->logger->info(sprintf(
                     'Loading exchange rate for %s/%s.',
@@ -69,6 +69,27 @@ final class WalletCollectionController extends Controller
 
             }
         }
+    }
+
+    public function getTotalWorth()
+    {
+        $success = true;
+        $return = ['total' => 0];
+
+        foreach ($this->getWallets() as $wallet) {
+            $balance = $wallet->getBalance();
+            if ($balance > 0) {
+                $return[$wallet->getName()] = $balance;
+                $return['total'] += $balance;
+            } else {
+                $success = false;
+            }
+        }
+        if ($success === false) {
+            unset ($return['total']);
+        }
+
+        return $return;
     }
 
     /**
