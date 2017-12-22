@@ -15,6 +15,7 @@ class Coin implements CoinInterface
 {
     protected $name = null;
     protected $symbol = null;
+    protected $amount = null;
     protected $balance = null;
     protected $exchangeRate = null;
     protected $addresses = [];
@@ -30,8 +31,8 @@ class Coin implements CoinInterface
             $this->addresses = $data['addresses'];
         }
 
-        if(isset($data['balance']) && is_float($data['balance'])) {
-            $this->balance = $data['balance'];
+        if(isset($data['amount']) && is_float($data['amount'])) {
+            $this->amount = $data['amount'];
         }
     }
 
@@ -79,6 +80,12 @@ class Coin implements CoinInterface
      */
     public function getBalance(): string
     {
+        try {
+            $this->balance = $this->getAmount() * $this->getExchangeRate('EUR');
+        } catch (\Exception $e) {
+            $this->balance = null;
+        }
+
         return $this->balance;
     }
 
@@ -90,6 +97,9 @@ class Coin implements CoinInterface
         $this->balance = $balance;
     }
 
+    public function getAmount() {
+        return $this->amount;
+    }
 
     /**
      * @param string $fiatSymbol
@@ -119,6 +129,7 @@ class Coin implements CoinInterface
 
         return $this->exchangeRate;
     }
+
 
     /**
      * @return array
