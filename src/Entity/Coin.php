@@ -98,7 +98,7 @@ class Coin implements CoinInterface
     }
 
     public function getAmount() {
-        return $this->amount;
+        return floatval($this->amount);
     }
 
     /**
