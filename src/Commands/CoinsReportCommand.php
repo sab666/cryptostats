@@ -68,7 +68,7 @@ final class CoinsReportCommand extends ContainerAwareCommand
             if($exchangeRate != null) {
                 $exchangeRatesReport[] = new Point(
                     'price',
-                    $exchangeRate,
+                    floatval($exchangeRate),
                     [ 'coin' => $wallet->getSymbol() ],
                     [ 'name' => $wallet->getName() ],
                     $timestamp
@@ -80,7 +80,7 @@ final class CoinsReportCommand extends ContainerAwareCommand
             if($balance != null) {
                 $balancesReport[] = new Point(
                     'worth',
-                    $balance,
+                    floatval($balance),
                     [ 'coin' => $wallet->getSymbol() ],
                     [ 'name' => $wallet->getName() ],
                     $timestamp
@@ -91,7 +91,7 @@ final class CoinsReportCommand extends ContainerAwareCommand
             if($coinAmount != null && $coinAmount > 0) {
                 $amountsReport[] = new Point(
                     'coins',
-                    $coinAmount,
+                    floatval($coinAmount),
                     [ 'coin' => $wallet->getSymbol() ],
                     [ 'name' => $wallet->getName() ],
                     $timestamp
