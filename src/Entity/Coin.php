@@ -125,7 +125,7 @@ class Coin implements CoinInterface
             )), true);
 
             if (is_array($json) && isset($json['ticker']) && isset($json['ticker']['price'])) {
-                $this->exchangeRate = $json['ticker']['price'];
+                $this->exchangeRate = floatval($json['ticker']['price']);
             }
         }
 
