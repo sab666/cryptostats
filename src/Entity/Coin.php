@@ -109,6 +109,8 @@ class Coin implements CoinInterface
      */
     public function getExchangeRate(string $fiatSymbol, bool $forceUpdate = false)
     {
+        if($this->exchangeRate != null && !$forceUpdate) return $this->exchangeRate;
+
         if(!preg_match('/^[A-Z]{3}$/', $fiatSymbol)) {
             throw new \Exception("Not a valid symbol: '$fiatSymbol'.");
         }
