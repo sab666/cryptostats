@@ -60,6 +60,7 @@ final class CoinsReportCommand extends ContainerAwareCommand
         $timestamp = time();
         $exchangeRatesReport = [];
         $balancesReport = [];
+        $amountsReport = [];
 
         foreach($this->wallets->getWallets() as $wallet) {
             $exchangeRate = $wallet->getExchangeRate(CURRENCY);
@@ -85,6 +86,17 @@ final class CoinsReportCommand extends ContainerAwareCommand
                     $timestamp
                 );
             }
+
+            $coinAmount = $wallet->getAmount();
+            if($coinAmount != null && $coinAmount > 0) {
+                $amountsReport[] = new Point(
+                    'coins',
+                    $coinAmount,
+                    [ 'coin' => $wallet->getSymbol() ],
+                    [ 'name' => $wallet->getName() ],
+                    $timestamp
+                );
+            }
         }
 
         if(isset($balances['total']) && $balances['total'] != null) {
@@ -99,9 +111,11 @@ final class CoinsReportCommand extends ContainerAwareCommand
 
         $this->logger->info('Exchange rates'. print_r($exchangeRatesReport, true));
         $this->logger->info('Balances'. print_r($balancesReport, true));
+        $this->logger->info('Amounts'. print_r($amountsReport, true));
 
         $this->influxDB->writePoints($exchangeRatesReport, $this->influxDB::PRECISION_SECONDS);
         $this->influxDB->writePoints($balancesReport, $this->influxDB::PRECISION_SECONDS);
+        $this->influxDB->writePoints($amountsReport, $this->influxDB::PRECISION_SECONDS);
     }
 
 
