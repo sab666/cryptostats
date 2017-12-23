@@ -110,12 +110,14 @@ final class CoinsReportCommand extends ContainerAwareCommand
         }
 
         $this->logger->info('Exchange rates'. print_r($exchangeRatesReport, true));
-        $this->logger->info('Balances'. print_r($balancesReport, true));
-        $this->logger->info('Amounts'. print_r($amountsReport, true));
-
         $this->influxDB->writePoints($exchangeRatesReport, $this->influxDB::PRECISION_SECONDS);
+
+        $this->logger->info('Balances'. print_r($balancesReport, true));
         $this->influxDB->writePoints($balancesReport, $this->influxDB::PRECISION_SECONDS);
+
+        $this->logger->info('Amounts'. print_r($amountsReport, true));
         $this->influxDB->writePoints($amountsReport, $this->influxDB::PRECISION_SECONDS);
+
     }
 
 
