@@ -45,6 +45,10 @@ class CoinFactory
                 return new Nxt($data);
                 break;
 
+            case 'bitcoingold':
+                return new BitcoinGold($data);
+                break;
+
             default:
                 throw new Exception(sprintf(
                     "No entity found for coin type '%s'.",
