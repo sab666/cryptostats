@@ -49,6 +49,10 @@ class CoinFactory
                 return new BitcoinGold($data);
                 break;
 
+            case 'bitcoindiamond':
+                return new BitcoinDiamond($data);
+                break;
+
             default:
                 throw new Exception(sprintf(
                     "No entity found for coin type '%s'.",
